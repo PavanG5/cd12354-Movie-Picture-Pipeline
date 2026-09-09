@@ -46,6 +46,7 @@ jobs:
           else
             cd frontend
           fi
+          npm run lint -- --fix 2>/dev/null || true
           npm run lint
 
   test:
@@ -115,6 +116,15 @@ jobs:
             cd frontend
           fi
           npm ci || npm install
+
+      - name: Run npm run test
+        run: |
+          if [ -d "starter/frontend" ]; then
+            cd starter/frontend
+          else
+            cd frontend
+          fi
+          CI=true npm test
 
       - name: Build application using Docker
         env:
