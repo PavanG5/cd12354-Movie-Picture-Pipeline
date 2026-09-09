@@ -7,7 +7,6 @@ on:
     paths:
       - 'starter/frontend/**'
       - 'frontend/**'
-      - '.github/workflows/frontend-cd.yaml'
   workflow_dispatch:
 
 env:
@@ -52,7 +51,6 @@ jobs:
           else
             cd frontend
           fi
-          npm run lint -- --fix || true
           npm run lint
 
   test:
@@ -116,17 +114,13 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
-          REACT_APP_MOVIE_API_URL: ${{ secrets.REACT_APP_MOVIE_API_URL }}
         run: |
           if [ -d "starter/frontend" ]; then
             cd starter/frontend
           else
             cd frontend
           fi
-          RAW_URL="${REACT_APP_MOVIE_API_URL:-http://a928690f2f1b84f96b26a33655d4fdfd-112847177.us-east-1.elb.amazonaws.com}"
-          API_URL=$(echo "$RAW_URL" | sed 's|/movies/*$||' | sed 's|/*$||')
-          echo "Building Frontend with API_URL=$API_URL"
-          docker build --no-cache --build-arg REACT_APP_MOVIE_API_URL="$API_URL" -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+          docker build --build-arg REACT_APP_MOVIE_API_URL=${{ secrets.REACT_APP_MOVIE_API_URL }} -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
@@ -146,4 +140,3 @@ jobs:
           fi
           kustomize edit set image frontend=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           kustomize build . | kubectl apply -f -
-          kubectl rollout restart deployment frontend || kubectl rollout restart deployment/frontend || true
