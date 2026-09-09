@@ -52,7 +52,7 @@ jobs:
           else
             cd frontend
           fi
-          npm run lint -- --fix 2>/devnull || true
+          npm run lint -- --fix || true
           npm run lint
 
   test:
