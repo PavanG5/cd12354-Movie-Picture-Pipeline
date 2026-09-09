@@ -1,10 +1,10 @@
-// test frontend CI pipeline
 import React, { useState } from 'react';
 import MovieList from './components/MovieList';
 import MovieDetails from './components/MovieDetails';
 import './App.css';
 
 export default function App() {
+  // test frontend CI pipeline
   const [selectedMovie, setSelectedMovie] = useState(null);
 
   const handleMovieClick = (movie) => {
