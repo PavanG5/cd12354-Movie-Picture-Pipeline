@@ -1,3 +1,4 @@
+// test frontend CI pipeline
 import React, { useState } from 'react';
 import MovieList from './components/MovieList';
 import MovieDetails from './components/MovieDetails';
@@ -25,4 +26,3 @@ export default function App() {
     </div>
   );
 }
-// test frontend CI pipeline
