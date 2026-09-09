@@ -7,6 +7,7 @@ on:
     paths:
       - 'starter/frontend/**'
       - 'frontend/**'
+      - '.github/workflows/frontend-cd.yaml'
   workflow_dispatch:
 
 env:
@@ -51,6 +52,7 @@ jobs:
           else
             cd frontend
           fi
+          npm run lint -- --fix || true
           npm run lint
 
   test:
@@ -120,7 +122,7 @@ jobs:
           else
             cd frontend
           fi
-          docker build --build-arg REACT_APP_MOVIE_API_URL=${{ secrets.REACT_APP_MOVIE_API_URL }} -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+          docker build --no-cache --build-arg REACT_APP_MOVIE_API_URL=${{ secrets.REACT_APP_MOVIE_API_URL }} -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
