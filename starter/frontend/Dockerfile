@@ -1,6 +1,6 @@
 FROM  public.ecr.aws/docker/library/node:18.14.2-alpine3.17
 
-REACT_APP_MOVIE_API_URL=http://a928690f2f1b84f96b26a33655d4fdfd-112847177.us-east-1.elb.amazonaws.com
+ARG REACT_APP_MOVIE_API_URL=http://a928690f2f1b84f96b26a33655d4fdfd-112847177.us-east-1.elb.amazonaws.com
 ENV REACT_APP_MOVIE_API_URL=${REACT_APP_MOVIE_API_URL}
 
 WORKDIR /app
